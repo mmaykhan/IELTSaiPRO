@@ -57,183 +57,151 @@ export default function Home() {
   };
 
   return (
-    <>
-      <header className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 shadow-sm shadow-indigo-500/5 font-manrope antialiased">
-        <div className="flex justify-between items-center max-w-7xl mx-auto px-6 lg:px-8 h-16">
-          <div className="text-xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">
-            IELTS AI Pro
-          </div>
-          <nav className="hidden md:flex space-x-8">
-            <a className="text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1" href="#">Features</a>
-            <a className="text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition-colors" href="#">Pricing</a>
-            <a className="text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition-colors" href="#">Success Stories</a>
-            <a className="text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition-colors" href="#">About</a>
-          </nav>
-          <div className="flex items-center space-x-4">
-            <button className="hidden md:block text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200 px-4 py-2 font-medium active:scale-95 ease-in-out">
-              Login
-            </button>
-            <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-all duration-200 active:scale-95 ease-in-out shadow-sm shadow-indigo-500/20">
-              Get Started
-            </button>
+    <main className="max-w-container-max mx-auto px-margin-page pb-section-gap flex-1 w-full">
+      <section className="flex flex-col items-center text-center py-20 lg:py-32 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary-container/20 rounded-full blur-[100px] -z-10"></div>
+        <h1 className="font-h1 text-h1 text-on-surface max-w-4xl mb-stack-lg">
+          What&apos;s Your Target IELTS Band?
+        </h1>
+        <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-12">
+          Tell us your goal, and our AI will build the exact roadmap to get you there. No guesswork, just a personalized path to success.
+        </p>
+        <button 
+          onClick={handleBuildRoadmap}
+          disabled={isGenerating}
+          className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md px-8 py-4 rounded-full shadow-[0_10px_30px_-10px_rgba(99,102,241,0.4)] transition-all duration-300 hover:-translate-y-1 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+        >
+          {isGenerating ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Generating your roadmap...
+            </>
+          ) : (
+            "Build My Roadmap"
+          )}
+        </button>
+      </section>
+
+      <section className="max-w-3xl mx-auto">
+        <div className="bg-surface-container-lowest rounded-[24px] shadow-[0_8px_40px_-12px_rgba(70,72,212,0.08)] border border-outline-variant/30 p-8 md:p-12">
+          <div className="flex flex-col gap-stack-lg">
+            
+            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
+              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">1</span>
+                Current English level?
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {["Beginner", "Intermediate", "Advanced"].map((level) => (
+                  <button 
+                    key={level}
+                    onClick={() => handleSelect("englishLevel", level)}
+                    className={getButtonClass(answers.englishLevel === level)}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
+              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">2</span>
+                Target IELTS band?
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {["6.0", "6.5", "7.0", "7.5", "8.0+"].map((band) => (
+                  <button 
+                    key={band}
+                    onClick={() => handleSelect("targetBand", band)}
+                    className={getButtonClass(answers.targetBand === band, "px-5 py-3")}
+                  >
+                    {band}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
+              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">3</span>
+                Time until exam?
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {["1 month", "3 months", "6 months+"].map((time) => (
+                  <button 
+                    key={time}
+                    onClick={() => handleSelect("timeUntilExam", time)}
+                    className={getButtonClass(answers.timeUntilExam === time)}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
+              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">4</span>
+                Weekly study hours?
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {["2-5 hours", "5-10 hours", "10+ hours"].map((hours) => (
+                  <button 
+                    key={hours}
+                    onClick={() => handleSelect("weeklyHours", hours)}
+                    className={getButtonClass(answers.weeklyHours === hours)}
+                  >
+                    {hours}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
+              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">5</span>
+                Most struggling section?
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { label: "Listening", icon: "headphones" },
+                  { label: "Reading", icon: "menu_book" },
+                  { label: "Writing", icon: "edit" },
+                  { label: "Speaking", icon: "mic" }
+                ].map((section) => (
+                  <button 
+                    key={section.label}
+                    onClick={() => handleSelect("strugglingSection", section.label)}
+                    className={getButtonClass(answers.strugglingSection === section.label, "px-6 py-3 flex items-center gap-2")}
+                  >
+                    <span className="material-symbols-outlined text-[18px]">{section.icon}</span>
+                    {section.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
-      </header>
-      
-      <main className="max-w-container-max mx-auto px-margin-page pb-section-gap flex-1 w-full">
-        <section className="flex flex-col items-center text-center py-20 lg:py-32 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary-container/20 rounded-full blur-[100px] -z-10"></div>
-          <h1 className="font-h1 text-h1 text-on-surface max-w-4xl mb-stack-lg">
-            What&apos;s Your Target IELTS Band?
-          </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-12">
-            Tell us your goal, and our AI will build the exact roadmap to get you there. No guesswork, just a personalized path to success.
-          </p>
-          <button 
-            onClick={handleBuildRoadmap}
-            disabled={isGenerating}
-            className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md px-8 py-4 rounded-full shadow-[0_10px_30px_-10px_rgba(99,102,241,0.4)] transition-all duration-300 hover:-translate-y-1 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-          >
-            {isGenerating ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Generating your roadmap...
-              </>
-            ) : (
-              "Build My Roadmap"
-            )}
-          </button>
-        </section>
+      </section>
 
-        <section className="max-w-3xl mx-auto">
-          <div className="bg-surface-container-lowest rounded-[24px] shadow-[0_8px_40px_-12px_rgba(70,72,212,0.08)] border border-outline-variant/30 p-8 md:p-12">
-            <div className="flex flex-col gap-stack-lg">
-              
-              <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-                <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">1</span>
-                  Current English level?
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {["Beginner", "Intermediate", "Advanced"].map((level) => (
-                    <button 
-                      key={level}
-                      onClick={() => handleSelect("englishLevel", level)}
-                      className={getButtonClass(answers.englishLevel === level)}
-                    >
-                      {level}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-                <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">2</span>
-                  Target IELTS band?
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {["6.0", "6.5", "7.0", "7.5", "8.0+"].map((band) => (
-                    <button 
-                      key={band}
-                      onClick={() => handleSelect("targetBand", band)}
-                      className={getButtonClass(answers.targetBand === band, "px-5 py-3")}
-                    >
-                      {band}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-                <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">3</span>
-                  Time until exam?
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {["1 month", "3 months", "6 months+"].map((time) => (
-                    <button 
-                      key={time}
-                      onClick={() => handleSelect("timeUntilExam", time)}
-                      className={getButtonClass(answers.timeUntilExam === time)}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-                <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">4</span>
-                  Weekly study hours?
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {["2-5 hours", "5-10 hours", "10+ hours"].map((hours) => (
-                    <button 
-                      key={hours}
-                      onClick={() => handleSelect("weeklyHours", hours)}
-                      className={getButtonClass(answers.weeklyHours === hours)}
-                    >
-                      {hours}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-                <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">5</span>
-                  Most struggling section?
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {[
-                    { label: "Listening", icon: "headphones" },
-                    { label: "Reading", icon: "menu_book" },
-                    { label: "Writing", icon: "edit" },
-                    { label: "Speaking", icon: "mic" }
-                  ].map((section) => (
-                    <button 
-                      key={section.label}
-                      onClick={() => handleSelect("strugglingSection", section.label)}
-                      className={getButtonClass(answers.strugglingSection === section.label, "px-6 py-3 flex items-center gap-2")}
-                    >
-                      <span className="material-symbols-outlined text-[18px]">{section.icon}</span>
-                      {section.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
+      {roadmap && (
+        <section ref={roadmapRef} className="max-w-4xl mx-auto mt-16 mb-24 scroll-mt-24 w-full">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 border border-slate-100 dark:border-slate-800 transition-all duration-500 ease-in-out opacity-100 translate-y-0">
+            <h2 className="text-3xl font-bold font-manrope text-slate-900 dark:text-white mb-8 pb-4 border-b border-slate-100 dark:border-slate-800">
+              Your Personalized Roadmap
+            </h2>
+            <div className="prose prose-lg prose-indigo dark:prose-invert max-w-none prose-headings:font-manrope prose-p:font-inter prose-li:font-inter">
+              <ReactMarkdown>{roadmap}</ReactMarkdown>
             </div>
           </div>
         </section>
-
-        {roadmap && (
-          <section ref={roadmapRef} className="max-w-4xl mx-auto mt-16 mb-24 scroll-mt-24 w-full">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 border border-slate-100 dark:border-slate-800 transition-all duration-500 ease-in-out opacity-100 translate-y-0">
-              <h2 className="text-3xl font-bold font-manrope text-slate-900 dark:text-white mb-8 pb-4 border-b border-slate-100 dark:border-slate-800">
-                Your Personalized Roadmap
-              </h2>
-              <div className="prose prose-lg prose-indigo dark:prose-invert max-w-none prose-headings:font-manrope prose-p:font-inter prose-li:font-inter">
-                <ReactMarkdown>{roadmap}</ReactMarkdown>
-              </div>
-            </div>
-          </section>
-        )}
-      </main>
-      
-      <footer className="w-full py-8 bg-transparent border-t border-slate-200 dark:border-slate-800 font-manrope text-sm mt-auto">
-        <div className="max-w-7xl mx-auto px-6 flex justify-center items-center text-center">
-          <p className="text-slate-500 dark:text-slate-400">
-            © 2024 IELTS AI Pro. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </>
+      )}
+    </main>
   );
 }
 
