@@ -46,7 +46,7 @@ export default function RootLayout({
             <nav className="hidden md:flex space-x-8">
               <Link className="text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition-colors" href="/about">About</Link>
               <Link className="text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition-colors" href="/pricing">Pricing</Link>
-              <Link className="text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition-colors" href="/success-stories">Success Stories</Link>
+              <Link className="text-slate-600 dark:text-slate-300 hover:text-indigo-500 transition-colors" href="/reviews">Student Feedback</Link>
             </nav>
             <div className="flex items-center space-x-4">
               <button className="hidden md:block text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200 px-4 py-2 font-medium active:scale-95 ease-in-out">

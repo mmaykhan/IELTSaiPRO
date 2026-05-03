@@ -1,7 +1,25 @@
 "use client";
 
 import { useState, useRef } from "react";
-import ReactMarkdown from "react-markdown";
+import { motion } from "framer-motion";
+import { 
+  Headphones, 
+  BookOpen, 
+  PenTool, 
+  Mic2, 
+  CheckCircle2, 
+  Loader2, 
+  Sparkles, 
+  Target, 
+  Trophy, 
+  Calendar, 
+  Clock, 
+  AlertCircle, 
+  Star, 
+  Info,
+  Book,
+  Lightbulb
+} from "lucide-react";
 
 export default function Home() {
   const [answers, setAnswers] = useState({
@@ -13,7 +31,7 @@ export default function Home() {
   });
   
   const [isGenerating, setIsGenerating] = useState(false);
-  const [roadmap, setRoadmap] = useState<string>("");
+  const [roadmap, setRoadmap] = useState<any>(null);
   const roadmapRef = useRef<HTMLElement>(null);
 
   const handleSelect = (key: keyof typeof answers, value: string) => {
@@ -22,7 +40,7 @@ export default function Home() {
 
   const handleBuildRoadmap = async () => {
     setIsGenerating(true);
-    setRoadmap("");
+    setRoadmap(null);
     
     try {
       const response = await fetch("/api/generate-roadmap", {
@@ -49,51 +67,84 @@ export default function Home() {
   };
 
   const getButtonClass = (isActive: boolean, extraClasses: string = "px-6 py-3") => {
-    return `${extraClasses} rounded-full font-label-md text-label-md transition-colors border border-transparent ${
+    return `${extraClasses} rounded-full font-label-md text-label-md transition-all duration-200 border ${
       isActive
-        ? "bg-primary-container text-on-primary-container shadow-sm"
-        : "bg-surface-container hover:bg-primary-fixed hover:text-on-primary-fixed-variant text-on-surface-variant"
+        ? "bg-primary text-white border-primary shadow-lg scale-105"
+        : "bg-white hover:bg-slate-50 text-slate-600 border-slate-200"
     }`;
   };
 
+  const getIcon = (category: string) => {
+    const cat = category.toLowerCase();
+    if (cat.includes("listening")) return <Headphones className="w-5 h-5" />;
+    if (cat.includes("reading")) return <BookOpen className="w-5 h-5" />;
+    if (cat.includes("writing")) return <PenTool className="w-5 h-5" />;
+    if (cat.includes("speaking")) return <Mic2 className="w-5 h-5" />;
+    return <CheckCircle2 className="w-5 h-5" />;
+  };
+
   return (
-    <main className="max-w-container-max mx-auto px-margin-page pb-section-gap flex-1 w-full">
-      <section className="flex flex-col items-center text-center py-20 lg:py-32 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary-container/20 rounded-full blur-[100px] -z-10"></div>
-        <h1 className="font-h1 text-h1 text-on-surface max-w-4xl mb-stack-lg">
-          What&apos;s Your Target IELTS Band?
-        </h1>
-        <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-12">
-          Tell us your goal, and our AI will build the exact roadmap to get you there. No guesswork, just a personalized path to success.
-        </p>
-        <button 
-          onClick={handleBuildRoadmap}
-          disabled={isGenerating}
-          className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md px-8 py-4 rounded-full shadow-[0_10px_30px_-10px_rgba(99,102,241,0.4)] transition-all duration-300 hover:-translate-y-1 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-        >
-          {isGenerating ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Generating your roadmap...
-            </>
-          ) : (
-            "Build My Roadmap"
-          )}
-        </button>
+    <main className="min-h-screen bg-[#f8fafc] pb-24">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden pt-20 pb-16 lg:pt-32 lg:pb-24">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-400/10 rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6"
+          >
+            Your Path to <span className="text-primary">IELTS Success</span>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-lg text-slate-600 max-w-2xl mx-auto mb-10"
+          >
+            Get a personalized, week-by-week study plan tailored to your level and goals. Powered by AI, designed for your success.
+          </motion.p>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <button 
+              onClick={handleBuildRoadmap}
+              disabled={isGenerating}
+              className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 rounded-full shadow-xl shadow-primary/20 transition-all duration-300 hover:-translate-y-1 disabled:opacity-70"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5" />
+                  Crafting Your Strategy...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-5 h-5" />
+                  Generate My Roadmap
+                </>
+              )}
+            </button>
+          </motion.div>
+        </div>
       </section>
 
-      <section className="max-w-3xl mx-auto">
-        <div className="bg-surface-container-lowest rounded-[24px] shadow-[0_8px_40px_-12px_rgba(70,72,212,0.08)] border border-outline-variant/30 p-8 md:p-12">
-          <div className="flex flex-col gap-stack-lg">
+      {/* Form Section */}
+      <section className="max-w-4xl mx-auto px-6 mb-20">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-slate-200/50 border border-white p-8 md:p-12">
+          <div className="space-y-12">
             
-            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">1</span>
+            <div className="space-y-4">
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <Target className="w-4 h-4 text-primary" />
                 Current English level?
-              </h3>
+              </label>
               <div className="flex flex-wrap gap-3">
                 {["Beginner", "Intermediate", "Advanced"].map((level) => (
                   <button 
@@ -107,11 +158,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">2</span>
+            <div className="space-y-4">
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <Trophy className="w-4 h-4 text-primary" />
                 Target IELTS band?
-              </h3>
+              </label>
               <div className="flex flex-wrap gap-3">
                 {["6.0", "6.5", "7.0", "7.5", "8.0+"].map((band) => (
                   <button 
@@ -125,79 +176,194 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">3</span>
-                Time until exam?
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {["1 month", "3 months", "6 months+"].map((time) => (
-                  <button 
-                    key={time}
-                    onClick={() => handleSelect("timeUntilExam", time)}
-                    className={getButtonClass(answers.timeUntilExam === time)}
-                  >
-                    {time}
-                  </button>
-                ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <label className="flex items-center gap-2 text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  Time until exam?
+                </label>
+                <div className="flex flex-wrap gap-3">
+                  {["1 month", "3 months", "6 months+"].map((time) => (
+                    <button 
+                      key={time}
+                      onClick={() => handleSelect("timeUntilExam", time)}
+                      className={getButtonClass(answers.timeUntilExam === time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <label className="flex items-center gap-2 text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                  <Clock className="w-4 h-4 text-primary" />
+                  Weekly study hours?
+                </label>
+                <div className="flex flex-wrap gap-3">
+                  {["2-5 hours", "5-10 hours", "10+ hours"].map((hours) => (
+                    <button 
+                      key={hours}
+                      onClick={() => handleSelect("weeklyHours", hours)}
+                      className={getButtonClass(answers.weeklyHours === hours)}
+                    >
+                      {hours}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">4</span>
-                Weekly study hours?
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {["2-5 hours", "5-10 hours", "10+ hours"].map((hours) => (
-                  <button 
-                    key={hours}
-                    onClick={() => handleSelect("weeklyHours", hours)}
-                    className={getButtonClass(answers.weeklyHours === hours)}
-                  >
-                    {hours}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="border-b border-outline-variant/20 pb-8 last:border-0 last:pb-0">
-              <h3 className="font-h3 text-h3 text-on-surface mb-stack-md flex items-center gap-3">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md">5</span>
+            <div className="space-y-4">
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <AlertCircle className="w-4 h-4 text-primary" />
                 Most struggling section?
-              </h3>
+              </label>
               <div className="flex flex-wrap gap-3">
                 {[
-                  { label: "Listening", icon: "headphones" },
-                  { label: "Reading", icon: "menu_book" },
-                  { label: "Writing", icon: "edit" },
-                  { label: "Speaking", icon: "mic" }
+                  { label: "Listening", icon: Headphones },
+                  { label: "Reading", icon: BookOpen },
+                  { label: "Writing", icon: PenTool },
+                  { label: "Speaking", icon: Mic2 }
                 ].map((section) => (
                   <button 
                     key={section.label}
                     onClick={() => handleSelect("strugglingSection", section.label)}
                     className={getButtonClass(answers.strugglingSection === section.label, "px-6 py-3 flex items-center gap-2")}
                   >
-                    <span className="material-symbols-outlined text-[18px]">{section.icon}</span>
+                    <section.icon className="w-4 h-4" />
                     {section.label}
                   </button>
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
+      {/* Roadmap Section */}
       {roadmap && (
-        <section ref={roadmapRef} className="max-w-4xl mx-auto mt-16 mb-24 scroll-mt-24 w-full">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 border border-slate-100 dark:border-slate-800 transition-all duration-500 ease-in-out opacity-100 translate-y-0">
-            <h2 className="text-3xl font-bold font-manrope text-slate-900 dark:text-white mb-8 pb-4 border-b border-slate-100 dark:border-slate-800">
-              Your Personalized Roadmap
-            </h2>
-            <div className="prose prose-lg prose-indigo dark:prose-invert max-w-none prose-headings:font-manrope prose-p:font-inter prose-li:font-inter">
-              <ReactMarkdown>{roadmap}</ReactMarkdown>
+        <section ref={roadmapRef} className="max-w-5xl mx-auto px-6 space-y-12 scroll-mt-24">
+          
+          {/* Summary Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-primary text-white rounded-3xl p-8 md:p-12 shadow-2xl shadow-primary/20 relative overflow-hidden"
+          >
+            <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+            <div className="relative z-10 grid md:grid-cols-3 gap-8 items-center">
+              <div className="md:col-span-2 space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-widest">
+                  <Star className="w-3 h-3 fill-white" />
+                  Your Custom Plan
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold">{roadmap.summary.title}</h2>
+                <p className="text-white/80 text-lg">{roadmap.summary.description}</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-sm font-medium text-white/70">Overall Readiness</span>
+                  <span className="text-xl font-bold">0%</span>
+                </div>
+                <div className="w-full h-3 bg-white/20 rounded-full overflow-hidden">
+                  <div className="w-0 h-full bg-white rounded-full transition-all duration-1000 ease-out" style={{ width: '5%' }}></div>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-xs text-white/60">
+                  <Info className="w-3 h-3" />
+                  Targeting Band {answers.targetBand} by {roadmap.summary.estimatedSuccessDate}
+                </div>
+              </div>
             </div>
+          </motion.div>
+
+          {/* Week Cards */}
+          <div className="grid grid-cols-1 gap-8">
+            {roadmap.weeks.map((week: any, idx: number) => (
+              <motion.div
+                key={week.weekNumber}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="group relative flex flex-col md:flex-row gap-6"
+              >
+                <div className="flex-none flex flex-col items-center">
+                  <div className="w-12 h-12 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-primary font-bold text-lg group-hover:scale-110 transition-transform">
+                    {week.weekNumber}
+                  </div>
+                  <div className="flex-1 w-0.5 bg-slate-200 my-2 group-last:hidden"></div>
+                </div>
+                
+                <div className="flex-1 bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/40 border border-slate-100 hover:border-primary/20 transition-all">
+                  <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                    {week.title}
+                  </h3>
+                  
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {week.tasks.map((task: any, tIdx: number) => (
+                      <div key={tIdx} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                        <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider">
+                          {getIcon(task.category)}
+                          {task.category}
+                        </div>
+                        <p className="font-semibold text-slate-800 leading-tight">{task.task}</p>
+                        <p className="text-sm text-slate-500">{task.details}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Extra Info */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="bg-slate-900 text-white rounded-3xl p-8 space-y-6 shadow-2xl"
+            >
+              <h3 className="text-xl font-bold flex items-center gap-3">
+                <Book className="w-6 h-6 text-blue-400" />
+                Recommended Resources
+              </h3>
+              <ul className="space-y-4">
+                {roadmap.resources.map((res: any, i: number) => (
+                  <li key={i} className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 uppercase text-[10px] font-bold">
+                      {res.type.slice(0, 3)}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-200">{res.name}</h4>
+                      <p className="text-sm text-slate-400">Available at {res.url.includes('example') ? 'official portals' : res.url}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="bg-amber-50 rounded-3xl p-8 border border-amber-100 space-y-6"
+            >
+              <h3 className="text-xl font-bold text-amber-900 flex items-center gap-3">
+                <Lightbulb className="w-6 h-6 text-amber-500" />
+                Expert Tips for Band {answers.targetBand}
+              </h3>
+              <div className="space-y-4">
+                {roadmap.proTips.map((tip: string, i: number) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="w-6 h-6 rounded-full bg-amber-200 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0">
+                      {i + 1}
+                    </div>
+                    <p className="text-amber-800 text-sm leading-relaxed">{tip}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </section>
       )}
