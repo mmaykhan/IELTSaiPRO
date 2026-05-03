@@ -10,10 +10,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'API Key is missing in environment variables' }, { status: 500 });
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      generationConfig: { responseMimeType: "application/json" }
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY, {
+      apiVersion: "v1",
+    });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash-latest",
+      generationConfig: { responseMimeType: "application/json" },
     });
 
     const prompt = `You are an expert IELTS Tutor. Use the provided user data to create a detailed, week-by-week IELTS study roadmap. 
