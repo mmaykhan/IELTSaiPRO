@@ -3,58 +3,24 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    const { formData } = await req.json();
     const genAI = new GoogleGenerativeAI("AIzaSyAHB8HN5z2ldm0YPmqxqx7MLn7FLBomJUg");
-
-    const data = await req.json();
-    const { englishLevel, targetBand, timeUntilExam, weeklyHours, strugglingSection } = data;
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
-      generationConfig: { responseMimeType: "application/json" },
+    
+    // Using 1.5 Flash for better reliability and quota
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      generationConfig: { responseMimeType: "application/json" }
     });
 
-    const prompt = `You are an expert IELTS Tutor. Use the provided user data to create a detailed, week-by-week IELTS study roadmap. 
-    Output the roadmap in a structured JSON format.
-    
-    The JSON should follow this structure:
-    {
-      "summary": {
-        "title": "string",
-        "description": "string (brief overview)",
-        "estimatedSuccessDate": "string",
-        "focusArea": "string (based on struggling section)"
-      },
-      "weeks": [
-        {
-          "weekNumber": number,
-          "title": "string (e.g., Week 1: Foundation Building)",
-          "tasks": [
-            { "category": "Listening", "task": "string", "details": "string" },
-            { "category": "Reading", "task": "string", "details": "string" },
-            { "category": "Writing", "task": "string", "details": "string" },
-            { "category": "Speaking", "task": "string", "details": "string" }
-          ]
-        }
-      ],
-      "resources": [
-        { "name": "string", "url": "string", "type": "Video | Book | Article | Practice Test" }
-      ],
-      "proTips": ["string", "string"]
-    }
-
-    User Data:
-    - Current English Level: ${englishLevel || "Not specified"}
-    - Target IELTS Band: ${targetBand || "Not specified"}
-    - Time Until Exam: ${timeUntilExam || "Not specified"}
-    - Weekly Study Hours: ${weeklyHours || "Not specified"}
-    - Weakest Section: ${strugglingSection || "Not specified"}`;
+    const prompt = `You are an IELTS expert. Based on this data: ${JSON.stringify(formData)}, generate a comprehensive weekly roadmap in JSON format. The JSON must include: summary, targetBand, and weeklyPlan (an array of weeks with title, focus, and tasks).`;
 
     const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    const roadmapData = JSON.parse(text);
-
-    return NextResponse.json({ roadmap: roadmapData });
+    const response = await result.response;
+    const text = response.text();
+    
+    return NextResponse.json(JSON.parse(text));
   } catch (error: any) {
-    console.error("Error generating roadmap:", error);
-    return NextResponse.json({ error: error.message || "Failed to generate roadmap" }, { status: 500 });
+    console.error("Roadmap Error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
