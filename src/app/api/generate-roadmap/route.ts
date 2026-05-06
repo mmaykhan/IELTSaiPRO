@@ -6,13 +6,9 @@ export async function POST(req: Request) {
     const data = await req.json();
     const { englishLevel, targetBand, timeUntilExam, weeklyHours, strugglingSection } = data;
 
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-      return NextResponse.json({ error: 'API Key is missing in environment variables' }, { status: 500 });
-    }
-
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
+    const genAI = new GoogleGenerativeAI('AIzaSyAHB8HN5z2ldm0YPmqxqx7MLn7FLBomJUg');
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" },
     });
 
