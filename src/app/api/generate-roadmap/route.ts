@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    const genAI = new GoogleGenerativeAI("AIzaSyAHB8HN5z2ldm0YPmqxqx7MLn7FLBomJUg");
+
     const data = await req.json();
     const { englishLevel, targetBand, timeUntilExam, weeklyHours, strugglingSection } = data;
-
-    const genAI = new GoogleGenerativeAI('AIzaSyAHB8HN5z2ldm0YPmqxqx7MLn7FLBomJUg');
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" },
